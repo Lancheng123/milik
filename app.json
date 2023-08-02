@@ -1,0 +1,696 @@
+[
+    {
+        "id": "8b0ff92d57542b0d",
+        "type": "debug",
+        "z": "9ea51a3a1feae2cf",
+        "name": "debug 1",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 960,
+        "y": 80,
+        "wires": []
+    },
+    {
+        "id": "e0fd4c0aa8dbe71c",
+        "type": "serial request",
+        "z": "9ea51a3a1feae2cf",
+        "name": "",
+        "serial": "4cdec6a0c353d48f",
+        "x": 810,
+        "y": 80,
+        "wires": [
+            [
+                "8b0ff92d57542b0d",
+                "0c7837e6cd7efa93"
+            ]
+        ]
+    },
+    {
+        "id": "954d5129f2d2692a",
+        "type": "function",
+        "z": "9ea51a3a1feae2cf",
+        "name": "function 1",
+        "func": "msg.payload= \"MILLik:REMote\"+'\\r\\n'\n    + \"SENSe:CHANnel 2\" + '\\r\\n'\n    + \"SENSe:FUNCtion TEMPerature\" + '\\r\\n'\n    + \"SENse:RESistance: RANGe 200\" + '\\r\\n'\n    + \"SENSe:CURRent NORMal\" + '\\r\\n'\n    + \"SENSe:UNITs C\" + '\\r\\n'\n    + \"SENSe:PROBe 3\" + '\\r\\n'\n    + \"INIT\" + '\\r\\n'\n    + \"FETCh?\"+ '\\r\\n';\n\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 280,
+        "y": 200,
+        "wires": [
+            [
+                "e0fd4c0aa8dbe71c"
+            ]
+        ]
+    },
+    {
+        "id": "1994e14b8a0f13b5",
+        "type": "inject",
+        "z": "9ea51a3a1feae2cf",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "str",
+        "x": 130,
+        "y": 200,
+        "wires": [
+            [
+                "954d5129f2d2692a"
+            ]
+        ]
+    },
+    {
+        "id": "6f4d2d5049daa2de",
+        "type": "function",
+        "z": "9ea51a3a1feae2cf",
+        "name": "CH1",
+        "func": "msg.payload = \n     \"SENSe:CHANnel 1\" + '\\r\\n'\n    +\"SENSe:PROBe 1\" + '\\r\\n'\n    + \"INIT\" + '\\r\\n'\n    + \"FETCh?\" + '\\r\\n';\n msg.topic=\"CH1\";\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 650,
+        "y": 60,
+        "wires": [
+            [
+                "e0fd4c0aa8dbe71c"
+            ]
+        ]
+    },
+    {
+        "id": "fa9170b828c0fc1c",
+        "type": "inject",
+        "z": "9ea51a3a1feae2cf",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "2",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "1",
+        "payloadType": "num",
+        "x": 130,
+        "y": 40,
+        "wires": [
+            [
+                "0f87fecc28e32f98"
+            ]
+        ]
+    },
+    {
+        "id": "5933e062cacb9cc4",
+        "type": "switch",
+        "z": "9ea51a3a1feae2cf",
+        "name": "",
+        "property": "payload",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "eq",
+                "v": "1",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "2",
+                "vt": "str"
+            }
+        ],
+        "checkall": "true",
+        "repair": false,
+        "outputs": 2,
+        "x": 470,
+        "y": 80,
+        "wires": [
+            [
+                "6f4d2d5049daa2de"
+            ],
+            [
+                "c73248bf480c4d4f",
+                "a225d6122a32c34c"
+            ]
+        ]
+    },
+    {
+        "id": "0f87fecc28e32f98",
+        "type": "function",
+        "z": "9ea51a3a1feae2cf",
+        "name": "Add+1",
+        "func": "let count = flow.get('count');\nif(count === undefined){\n    count=0\n}\nmsg.payload = count+1;\nflow.set('count',msg.payload)\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 130,
+        "y": 100,
+        "wires": [
+            [
+                "5933e062cacb9cc4"
+            ]
+        ]
+    },
+    {
+        "id": "a225d6122a32c34c",
+        "type": "function",
+        "z": "9ea51a3a1feae2cf",
+        "name": "Reset",
+        "func": "flow.set('count',0)\n",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 470,
+        "y": 120,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "c73248bf480c4d4f",
+        "type": "function",
+        "z": "9ea51a3a1feae2cf",
+        "name": "CH2",
+        "func": "msg.payload = \n    \"SENSe:CHANnel 2\" + '\\r\\n'\n    + \"SENSe:PROBe 3\" + '\\r\\n'\n    + \"INIT\" + '\\r\\n'\n    + \"FETCh?\" + '\\r\\n';\nmsg.topic = \"CH2\";\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 650,
+        "y": 100,
+        "wires": [
+            [
+                "e0fd4c0aa8dbe71c"
+            ]
+        ]
+    },
+    {
+        "id": "e1b9d25de11611a1",
+        "type": "ui_chart",
+        "z": "9ea51a3a1feae2cf",
+        "name": "",
+        "group": "0a308f31b925de02",
+        "order": 0,
+        "width": "6",
+        "height": "4",
+        "label": "chart",
+        "chartType": "line",
+        "legend": "false",
+        "xformat": "HH:mm:ss",
+        "interpolate": "linear",
+        "nodata": "",
+        "dot": false,
+        "ymin": "",
+        "ymax": "",
+        "removeOlder": 1,
+        "removeOlderPoints": "",
+        "removeOlderUnit": "3600",
+        "cutout": 0,
+        "useOneColor": false,
+        "useUTC": false,
+        "colors": [
+            "#1f77b4",
+            "#aec7e8",
+            "#ff7f0e",
+            "#2ca02c",
+            "#98df8a",
+            "#d62728",
+            "#ff9896",
+            "#9467bd",
+            "#c5b0d5"
+        ],
+        "outputs": 1,
+        "useDifferentColor": false,
+        "className": "",
+        "x": 1150,
+        "y": 160,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "0c7837e6cd7efa93",
+        "type": "switch",
+        "z": "9ea51a3a1feae2cf",
+        "name": "",
+        "property": "topic",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "eq",
+                "v": "CH1",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "CH2",
+                "vt": "str"
+            }
+        ],
+        "checkall": "true",
+        "repair": false,
+        "outputs": 2,
+        "x": 670,
+        "y": 200,
+        "wires": [
+            [
+                "ebf826a3cc0ad66a"
+            ],
+            [
+                "425cd6aaa583ba62"
+            ]
+        ]
+    },
+    {
+        "id": "d18d763e1dca7750",
+        "type": "ui_text_input",
+        "z": "9ea51a3a1feae2cf",
+        "name": "",
+        "label": "CH1",
+        "tooltip": "",
+        "group": "0a308f31b925de02",
+        "order": 1,
+        "width": 0,
+        "height": 0,
+        "passthru": true,
+        "mode": "text",
+        "delay": 300,
+        "topic": "topic",
+        "sendOnBlur": true,
+        "className": "",
+        "topicType": "msg",
+        "x": 950,
+        "y": 140,
+        "wires": [
+            [
+                "e1b9d25de11611a1"
+            ]
+        ]
+    },
+    {
+        "id": "14dcdca0faf8bb7d",
+        "type": "ui_text_input",
+        "z": "9ea51a3a1feae2cf",
+        "name": "",
+        "label": "CH2",
+        "tooltip": "",
+        "group": "0a308f31b925de02",
+        "order": 2,
+        "width": 0,
+        "height": 0,
+        "passthru": true,
+        "mode": "text",
+        "delay": 300,
+        "topic": "topic",
+        "sendOnBlur": true,
+        "className": "",
+        "topicType": "msg",
+        "x": 950,
+        "y": 180,
+        "wires": [
+            [
+                "e1b9d25de11611a1"
+            ]
+        ]
+    },
+    {
+        "id": "425cd6aaa583ba62",
+        "type": "function",
+        "z": "9ea51a3a1feae2cf",
+        "name": "4digit",
+        "func": "//read payload\nvar stringValue = msg.payload;\n\n//convert string to float to 2 decimal places\nvar floatValue = parseFloat(stringValue).toFixed(4);\n\n//set and return payload\nmsg.payload = floatValue;\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 790,
+        "y": 240,
+        "wires": [
+            [
+                "14dcdca0faf8bb7d",
+                "a49a681d89621d5c"
+            ]
+        ]
+    },
+    {
+        "id": "ebf826a3cc0ad66a",
+        "type": "function",
+        "z": "9ea51a3a1feae2cf",
+        "name": "4digit",
+        "func": "//read payload\nvar stringValue = msg.payload;\n\n//convert string to float to 2 decimal places\nvar floatValue = parseFloat(stringValue).toFixed(4);\n\n//set and return payload\nmsg.payload = floatValue;\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 790,
+        "y": 180,
+        "wires": [
+            [
+                "d18d763e1dca7750",
+                "bb29aa35b7acc050"
+            ]
+        ]
+    },
+    {
+        "id": "bb29aa35b7acc050",
+        "type": "change",
+        "z": "9ea51a3a1feae2cf",
+        "name": "",
+        "rules": [
+            {
+                "t": "set",
+                "p": "millikCH1",
+                "pt": "global",
+                "to": "payload",
+                "tot": "msg"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 1070,
+        "y": 260,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "a49a681d89621d5c",
+        "type": "change",
+        "z": "9ea51a3a1feae2cf",
+        "name": "",
+        "rules": [
+            {
+                "t": "set",
+                "p": "millikCH2",
+                "pt": "global",
+                "to": "payload",
+                "tot": "msg"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 1070,
+        "y": 300,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "b7faeafda1e1115f",
+        "type": "http in",
+        "z": "9ea51a3a1feae2cf",
+        "name": "",
+        "url": "/api/milliK",
+        "method": "get",
+        "upload": false,
+        "swaggerDoc": "",
+        "x": 120,
+        "y": 280,
+        "wires": [
+            [
+                "57892b2836359228"
+            ]
+        ]
+    },
+    {
+        "id": "57892b2836359228",
+        "type": "change",
+        "z": "9ea51a3a1feae2cf",
+        "name": "",
+        "rules": [
+            {
+                "t": "set",
+                "p": "CH1",
+                "pt": "msg",
+                "to": "millikCH1",
+                "tot": "global"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 310,
+        "y": 280,
+        "wires": [
+            [
+                "51bc435efc36bf75"
+            ]
+        ]
+    },
+    {
+        "id": "51bc435efc36bf75",
+        "type": "change",
+        "z": "9ea51a3a1feae2cf",
+        "name": "",
+        "rules": [
+            {
+                "t": "set",
+                "p": "CH2",
+                "pt": "msg",
+                "to": "millikCH2",
+                "tot": "global"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 310,
+        "y": 320,
+        "wires": [
+            [
+                "de228e9d6d18133b"
+            ]
+        ]
+    },
+    {
+        "id": "de228e9d6d18133b",
+        "type": "function",
+        "z": "9ea51a3a1feae2cf",
+        "name": "function 2",
+        "func": "msg.payload = {\"SN\":\"Millik\",\"CH1\":msg.CH1,\"CH2\":msg.CH2}\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 320,
+        "y": 360,
+        "wires": [
+            [
+                "e8419aea4cb1ddf1"
+            ]
+        ]
+    },
+    {
+        "id": "e8419aea4cb1ddf1",
+        "type": "http response",
+        "z": "9ea51a3a1feae2cf",
+        "name": "",
+        "statusCode": "200",
+        "headers": {
+            "content-type": "application/json"
+        },
+        "x": 460,
+        "y": 360,
+        "wires": []
+    },
+    {
+        "id": "15d727dd.33e808",
+        "type": "debug",
+        "z": "9ea51a3a1feae2cf",
+        "name": "",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 750,
+        "y": 380,
+        "wires": []
+    },
+    {
+        "id": "3b613a69.a247c6",
+        "type": "inject",
+        "z": "9ea51a3a1feae2cf",
+        "name": "temp json",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "60",
+        "crontab": "",
+        "once": false,
+        "onceDelay": "",
+        "topic": "",
+        "payload": "{\"id\":\"11\",\"temp\":\"19.7\",\"hum\":\"44\"}",
+        "payloadType": "str",
+        "x": 130,
+        "y": 360,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "533071b819b0cbfe",
+        "type": "comment",
+        "z": "9ea51a3a1feae2cf",
+        "name": "",
+        "info": " {\"id\":11, \"value\":1, \"value\":\"19.70;44.00;0\"}",
+        "x": 1040,
+        "y": 460,
+        "wires": []
+    },
+    {
+        "id": "a83ccadc87a5fd7b",
+        "type": "mqtt out",
+        "z": "9ea51a3a1feae2cf",
+        "name": "",
+        "topic": "sensors/calibrateroom",
+        "qos": "",
+        "retain": "",
+        "respTopic": "",
+        "contentType": "",
+        "userProps": "",
+        "correl": "",
+        "expiry": "",
+        "broker": "61de5090.0f5d9",
+        "x": 480,
+        "y": 420,
+        "wires": []
+    },
+    {
+        "id": "46024112fd560314",
+        "type": "tcp in",
+        "z": "9ea51a3a1feae2cf",
+        "name": "",
+        "server": "server",
+        "host": "",
+        "port": "4040",
+        "datamode": "stream",
+        "datatype": "utf8",
+        "newline": "\\n",
+        "topic": "",
+        "trim": false,
+        "base64": false,
+        "tls": "",
+        "x": 260,
+        "y": 420,
+        "wires": [
+            [
+                "a83ccadc87a5fd7b"
+            ]
+        ]
+    },
+    {
+        "id": "4cdec6a0c353d48f",
+        "type": "serial-port",
+        "serialport": "COM8",
+        "serialbaud": "9600",
+        "databits": "8",
+        "parity": "none",
+        "stopbits": "1",
+        "waitfor": "",
+        "dtr": "none",
+        "rts": "none",
+        "cts": "none",
+        "dsr": "none",
+        "newline": "\\r\\n",
+        "bin": "false",
+        "out": "char",
+        "addchar": "",
+        "responsetimeout": "1000"
+    },
+    {
+        "id": "0a308f31b925de02",
+        "type": "ui_group",
+        "name": "Default",
+        "tab": "577b953f53957017",
+        "order": 1,
+        "disp": true,
+        "width": "6",
+        "collapse": false,
+        "className": ""
+    },
+    {
+        "id": "61de5090.0f5d9",
+        "type": "mqtt-broker",
+        "name": "",
+        "broker": "localhost",
+        "port": "1883",
+        "clientid": "",
+        "autoConnect": true,
+        "usetls": false,
+        "protocolVersion": "4",
+        "keepalive": "60",
+        "cleansession": true,
+        "birthTopic": "",
+        "birthQos": "0",
+        "birthPayload": "",
+        "birthMsg": {},
+        "closeTopic": "",
+        "closePayload": "",
+        "closeMsg": {},
+        "willTopic": "",
+        "willQos": "0",
+        "willPayload": "",
+        "willMsg": {},
+        "userProps": "",
+        "sessionExpiry": ""
+    },
+    {
+        "id": "577b953f53957017",
+        "type": "ui_tab",
+        "name": "Home",
+        "icon": "dashboard",
+        "disabled": false,
+        "hidden": false
+    }
+]
